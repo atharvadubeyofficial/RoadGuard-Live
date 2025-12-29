@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 
-function Login() {
+function Login({ goToRegister }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
     console.log("Login Data:", email, password);
+  };
+
+  const handleForgotPassword = () => {
+    alert("Forgot Password flow next step me add hoga 🔒");
   };
 
   return (
@@ -36,6 +40,19 @@ function Login() {
           Login
         </button>
       </form>
+
+      {/* Forgot Password */}
+      <p style={styles.forgot} onClick={handleForgotPassword}>
+        Forgot Password?
+      </p>
+
+      {/* Register Switch */}
+      <p style={styles.switchText}>
+        Don’t have an account?{" "}
+        <span style={styles.link} onClick={goToRegister}>
+          Register
+        </span>
+      </p>
     </div>
   );
 }
@@ -68,6 +85,20 @@ const styles = {
     border: "none",
     background: "#2563eb",
     color: "#fff",
+    cursor: "pointer"
+  },
+  forgot: {
+    marginTop: "10px",
+    fontSize: "13px",
+    color: "#38bdf8",
+    cursor: "pointer"
+  },
+  switchText: {
+    marginTop: "14px",
+    fontSize: "14px"
+  },
+  link: {
+    color: "#38bdf8",
     cursor: "pointer"
   }
 };
