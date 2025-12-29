@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 function App() {
+  const [page, setPage] = useState("login");
+
   return (
-    <div>
-      <h1>Real-Time Vehicle Tracking App</h1>
-    </div>
+    <>
+      {page === "login" && (
+        <Login
+          goToRegister={() => setPage("register")}
+        />
+      )}
+
+      {page === "register" && (
+        <Register
+          goToLogin={() => setPage("login")}
+        />
+      )}
+    </>
   );
 }
 
