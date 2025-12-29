@@ -4,10 +4,41 @@ function Login({ goToRegister }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    console.log("Login Data:", email, password);
-  };
+  const handleLogin = async (e) => {
+  e.preventDefault();
+
+  try {
+    const res = await fetch("http://localhost:5000/api/auth/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email,
+        password
+      })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      alert(data.message || "Login failed");
+      return;
+    }
+
+    // ✅ JWT save
+    localStorage.setItem("token", data.token);
+
+    alert("Login Successful ✅");
+
+    // 👉 NEXT STEP me yaha map page open karenge
+    console.log("TOKEN:", data.token);
+
+  } catch (err) {
+    alert("Server error");
+    console.error(err);
+  }
+};
 
   const handleForgotPassword = () => {
     alert("Forgot Password flow next step me add hoga 🔒");
