@@ -1,44 +1,44 @@
 import React, { useState } from "react";
 
-function Login({ goToRegister }) {
+function Login({ goToRegister, onLoginSuccess }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleLogin = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const res = await fetch("http://localhost:5000/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email,
-        password
-      })
-    });
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email,
+          password
+        })
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.message || "Login failed");
-      return;
+      if (!res.ok) {
+        alert(data.message || "Login failed");
+        return;
+      }
+
+      // ✅ JWT save
+      localStorage.setItem("token", data.token);
+
+      alert("Login Successful ✅");
+
+      // 🔥 YAHI MAIN CHANGE
+      onLoginSuccess();
+
+    } catch (err) {
+      alert("Server error");
+      console.error(err);
     }
-
-    // ✅ JWT save
-    localStorage.setItem("token", data.token);
-
-    alert("Login Successful ✅");
-
-    // 👉 NEXT STEP me yaha map page open karenge
-    console.log("TOKEN:", data.token);
-
-  } catch (err) {
-    alert("Server error");
-    console.error(err);
-  }
-};
+  };
 
   const handleForgotPassword = () => {
     alert("Forgot Password flow next step me add hoga 🔒");
@@ -72,12 +72,10 @@ function Login({ goToRegister }) {
         </button>
       </form>
 
-      {/* Forgot Password */}
       <p style={styles.forgot} onClick={handleForgotPassword}>
         Forgot Password?
       </p>
 
-      {/* Register Switch */}
       <p style={styles.switchText}>
         Don’t have an account?{" "}
         <span style={styles.link} onClick={goToRegister}>
