@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import PermissionScreen from "./pages/PermissionScreen";
 import Dashboard from "./pages/Dashboard";
 
 function App() {
@@ -8,10 +10,14 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
-      setPage("dashboard");
-    } else {
+    const locationPermission = localStorage.getItem("locationPermission");
+
+    if (!token) {
       setPage("login");
+    } else if (!locationPermission) {
+      setPage("permissions");
+    } else {
+      setPage("dashboard");
     }
   }, []);
 
@@ -22,14 +28,20 @@ function App() {
       {page === "login" && (
         <Login
           goToRegister={() => setPage("register")}
-          onLoginSuccess={() => setPage("dashboard")}
+          onLoginSuccess={() => setPage("permissions")}
         />
       )}
 
       {page === "register" && (
         <Register
           goToLogin={() => setPage("login")}
-          onRegisterSuccess={() => setPage("dashboard")}
+          onRegisterSuccess={() => setPage("permissions")}
+        />
+      )}
+
+      {page === "permissions" && (
+        <PermissionScreen
+          onPermissionComplete={() => setPage("dashboard")}
         />
       )}
 
