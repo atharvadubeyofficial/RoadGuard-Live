@@ -1,45 +1,46 @@
 import React, { useState } from "react";
 
-function Register({ goToLogin }) {
+function Register({ goToLogin, onRegisterSuccess }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleRegister = async (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  try {
-    const res = await fetch("http://localhost:5000/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        name,
-        email,
-        password
-      })
-    });
+    try {
+      const res = await fetch("http://localhost:5000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password
+        })
+      });
 
-    const data = await res.json();
+      const data = await res.json();
 
-    if (!res.ok) {
-      alert(data.message || "Registration failed");
-      return;
+      if (!res.ok) {
+        alert(data.message || "Registration failed");
+        return;
+      }
+
+      // ✅ JWT save
+      localStorage.setItem("token", data.token);
+
+      alert("Registration Successful 🎉");
+
+      // 🔥 YAHI MAIN CHANGE
+      onRegisterSuccess();
+
+    } catch (err) {
+      alert("Server error");
+      console.error(err);
     }
-
-    // ✅ JWT save
-    localStorage.setItem("token", data.token);
-
-    alert("Registration Successful 🎉");
-
-    console.log("TOKEN:", data.token);
-
-  } catch (err) {
-    alert("Server error");
-    console.error(err);
-  }
-};
+  };
 
   return (
     <div style={styles.container}>
